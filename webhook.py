@@ -5,6 +5,9 @@ import os
 app = Flask(__name__)
 
 DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
+HABITICA_USER_ID = os.environ.get("HABITICA_USER_ID")
+HABITICA_API_TOKEN = os.environ.get("HABITICA_API_TOKEN")
+
 
 HABITICA_HEADERS = {
     "x-api-user": HABITICA_USER_ID,
