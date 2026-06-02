@@ -1,4 +1,4 @@
-@app.route("/habitica-webhook", methods=["POST"])
+@webhook.route("/habitica-webhook", methods=["POST"])
 def habitica_webhook():
     data = request.get_json()
     
