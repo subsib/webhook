@@ -6,7 +6,6 @@ app = Flask(__name__)
 
 DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
 
-
 @app.route("/habitica-webhook", methods=["POST"])
 def habitica_webhook():
     data = request.get_json()
@@ -26,16 +25,16 @@ def habitica_webhook():
     
     # Type de tâche en français
     task_type_map = {
-        "daily": "📅 Quotidienne",
-        "habit": "⚡ Habitude",
-        "todo": "☑️ À faire",
-        "reward": "🎁 Récompense"
+        "daily": "Quotidienne",
+        "habit": "Habitude",
+        "todo": "À faire",
+        "reward": "Récompense"
     }
     task_type = task_type_map.get(task.get("type", ""), "Tâche")
     
     description = (
         f"**{username}** a accompli une {task_type}\n"
-        f"✨ **+{delta} XP**"
+        f"**+{delta} XP**"
     )
     
     message = {
@@ -49,3 +48,6 @@ def habitica_webhook():
     
     response = requests.post(DISCORD_WEBHOOK_URL, json=message)
     return "", 200 if response.status_code == 204 else 500
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
