@@ -12,6 +12,7 @@ HABITICA_HEADERS = {
     "Content-Type": "application/json"
 }
 
+
 @app.route("/habitica-webhook", methods=["POST"])
 def habitica_webhook():
     data = request.get_json()
