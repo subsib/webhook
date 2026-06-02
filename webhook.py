@@ -1,4 +1,13 @@
-@webhook.route("/habitica-webhook", methods=["POST"])
+from flask import Flask, request
+import requests
+import os
+
+app = Flask(__name__)
+
+DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
+
+
+@app.route("/habitica-webhook", methods=["POST"])
 def habitica_webhook():
     data = request.get_json()
     
