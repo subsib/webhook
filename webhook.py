@@ -9,6 +9,7 @@ DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
 @app.route("/habitica-webhook", methods=["POST"])
 def habitica_webhook():
     data = request.get_json()
+    print("JSON reçu :", data)  # ← ajoute cette ligne
     
     # On filtre uniquement les tâches complétées
     if data.get("type") != "scored":
