@@ -6,6 +6,12 @@ app = Flask(__name__)
 
 DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
 
+HABITICA_HEADERS = {
+    "x-api-user": HABITICA_USER_ID,
+    "x-api-key": HABITICA_API_TOKEN,
+    "Content-Type": "application/json"
+}
+
 @app.route("/habitica-webhook", methods=["POST"])
 def habitica_webhook():
     data = request.get_json()
@@ -18,9 +24,20 @@ def habitica_webhook():
         return "", 200
     
     task = data.get("task", {})
-    user = data.get("user", {})
-    
-    username = user.get("profile", {}).get("name", "Quelqu'un")
+
+    # Récupérer le profil du user qui a fait la tâche
+    user_id = data.get("user", {}).get("_id", "")
+    if user_id:
+        r = requests.get(
+            f"https://habitica.com/api/v3/members/{user_id}",
+            headers=HABITICA_HEADERS
+        )
+        if r.status_code == 200:
+            username = r.json().get("data", {}).get("profile", {}).get("name", "Quelqu'un")
+        else:
+            username = "Quelqu'un"
+    else:
+        username = "Quelqu'un"
     delta = round(data.get("delta", 0), 1)  # XP gagnés
     
     # Type de tâche en français
