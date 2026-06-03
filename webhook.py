@@ -19,7 +19,7 @@ HABITICA_HEADERS = {
 @app.route("/habitica-webhook", methods=["POST"])
 
 def habitica_webhook():
-    data = request.json
+    data = request.get_json()
     
     # DEBUG : envoyer le JSON brut sur Discord
     payload_str = json.dumps(data, indent=2)
