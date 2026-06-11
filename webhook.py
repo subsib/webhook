@@ -70,7 +70,7 @@ def habitica_webhook():
     
     description = (
         f"**{username}** a accompli une {task_type}\n"
-        f"**+{delta} XP**"
+        f"**+{delta} XP**\n"
         # f"et les data : {data}"
     )
     
