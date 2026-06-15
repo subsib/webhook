@@ -61,7 +61,7 @@ def habitica_webhook():
     quest_remark = "rien"
 
     try:
-        party = requests.get("https://habitica.com/api/v3/groups/party", headers=headers).json()["data"]
+        party = requests.get("https://habitica.com/api/v3/groups/party", headers=HABITICA_HEADERS).json()["data"]
         quest = party["quest"]
         if quest.get("active"):
             boss_hp = quest["progress"]["hp"]   # PV restants du boss
