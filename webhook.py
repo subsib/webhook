@@ -69,6 +69,7 @@ def habitica_webhook():
         else:
             quest_remark = "Pas de quête active"    
     except Exception as e:
+        pass
 
 
 
