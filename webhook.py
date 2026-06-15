@@ -13,6 +13,7 @@ HABITICA_USER_NAME = os.environ.get("HABITICA_USER_NAME")
 HABITICA_HEADERS = {
     "x-api-user": HABITICA_USER_ID,
     "x-api-key": HABITICA_API_TOKEN,
+    "x-client": HABITICA_X_CLIENT,
     "Content-Type": "application/json"
 }
 
@@ -63,7 +64,7 @@ def habitica_webhook():
     try:
         party = requests.get("https://habitica.com/api/v3/groups/party", headers=HABITICA_HEADERS).json()["data"]
         quest_remark = "req+ "
-        quest = party['quest']
+        quest = party["quest"]
         quest_remark = "quest+ "
         if quest.get("active"):
             boss_hp = quest["progress"]["hp"]   # PV restants du boss
@@ -71,7 +72,7 @@ def habitica_webhook():
         else:
             quest_remark += "Pas de quête active"    
     except Exception as e:
-        quest_remark = e
+        quest_remark += e
 
 
 
