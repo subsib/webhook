@@ -58,14 +58,17 @@ def habitica_webhook():
     
 
 
-    quest_remark = ""
-    party = requests.get("https://habitica.com/api/v3/groups/party", headers=headers).json()["data"]
-    quest = party["quest"]
-    if quest.get("active"):
-        boss_hp = quest["progress"]["hp"]   # PV restants du boss
-        quest_remark = "Le boss a encore {boss_hp:.1f} PV"
-    else:
-        quest_remark = "Pas de quête active"    
+    quest_remark = "rien"
+
+    try:
+        party = requests.get("https://habitica.com/api/v3/groups/party", headers=headers).json()["data"]
+        quest = party["quest"]
+        if quest.get("active"):
+            boss_hp = quest["progress"]["hp"]   # PV restants du boss
+            quest_remark = "Le boss a encore {boss_hp:.1f} PV"
+        else:
+            quest_remark = "Pas de quête active"    
+    except Exception as e:
 
 
 
