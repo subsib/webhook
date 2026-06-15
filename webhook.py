@@ -19,18 +19,6 @@ HABITICA_HEADERS = {
 
 @app.route("/habitica-webhook", methods=["POST"])
 
-# DEBUG : envoyer le JSON brut sur Discord  
-# def habitica_webhook():
-#     data = request.get_json()
-    
-    # payload_str = json.dumps(data, indent=2)
-    # # Discord limite à 2000 caractères par message
-    # requests.post(DISCORD_WEBHOOK_URL, json={
-    #     "content": f"```json\n{payload_str[:1900]}\n```"
-    # })
-    
-    # return "OK", 200
-
 def habitica_webhook():
     data = request.get_json()
     
@@ -68,12 +56,25 @@ def habitica_webhook():
     }
     task_type = task_type_map.get(task.get("type", ""), "Tâche")
     
+
+
+    quest_remark = ""
+    party = requests.get("https://habitica.com/api/v3/groups/party", headers=headers).json()["data"]
+    quest = party["quest"]
+    if quest.get("active"):
+        boss_hp = quest["progress"]["hp"]   # PV restants du boss
+        quest_remark = "Le boss a encore {boss_hp:.1f} PV"
+    else:
+        quest_remark = "Pas de quête active"    
+
+
+
     description = (
-        f"**{username}** a accompli une {task_type}\n"
+        f"**{username}** a accompli une tâche {task_type}\n"
         f"**+{delta} XP**\n"
+        f"**{quest_remark}**\n"
         # f"et les data : {data}"
     )
-    
     message = {
         "embeds": [{
             "title": "✅ Tâche accomplie sur Habitica !",
@@ -82,7 +83,7 @@ def habitica_webhook():
             "footer": {"text": "Habitica → Discord"}
         }]
     }
-    
+
     response = requests.post(DISCORD_WEBHOOK_URL, json=message)
     return "", 200 if response.status_code == 204 else 500
 
