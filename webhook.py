@@ -55,7 +55,7 @@ def habitica_webhook():
         party = requests.get("https://habitica.com/api/v3/groups/party", headers=HABITICA_HEADERS).json()["data"]
         quest = party["quest"]
         party_name = party["name"]
-        content_quest = requests.get("https://habitica.com/api/v3/content", headers=headers).json()["data"]
+        content_quest = requests.get("https://habitica.com/api/v3/content", headers=HABITICA_HEADERS).json()["data"]
 
         if quest.get("active"):
             quest_key = quest["key"]
