@@ -33,19 +33,6 @@ def habitica_webhook():
     
     task = data.get("task", {})
 
-    # Récupérer le profil du user qui a fait la tâche
-    # user_id = data.get("user", {}).get("_id", "")
-    # if user_id:
-    #     r = requests.get(
-    #         f"https://habitica.com/api/v3/members/{user_id}",
-    #         headers=HABITICA_HEADERS
-    #     )
-    #     if r.status_code == 200:
-    #         username = r.json().get("data", {}).get("profile", {}).get("name", "Quelqu'un")
-    #     else:
-    #         username = "Quelqu'un"
-    # else:
-    #     username = "Quelqu'un"
     username = HABITICA_USER_NAME
     delta = round(data.get("delta", 0), 1)  # XP gagnés
     
@@ -61,19 +48,28 @@ def habitica_webhook():
 
 
     quest_remark = "rien"
-
+    boss_name = "John Doe"
+    party_name = "party null"
+    quest_key = -1
     try:
         party = requests.get("https://habitica.com/api/v3/groups/party", headers=HABITICA_HEADERS).json()["data"]
         quest = party["quest"]
+        party_name = party["name"]
+        content_quest = requests.get("https://habitica.com/api/v3/content", headers=headers).json()["data"]
+
         if quest.get("active"):
-            boss_hp = quest["progress"]["hp"]   # PV restants du boss
-            quest_remark = f"*Le boss a encore {boss_hp:.1f} PV*\n"
+            quest_key = quest["key"]
+            boss_name = content["quests"][quest_key]["boss"]["name"]
+            if "hp" in quest["progress"]:
+                boss_hp = quest["progress"]["hp"]   # PV restants du boss
+                quest_remark = f"*Le boss {boss_name} a encore {boss_hp:.1f} PV*\n"
+            else:
+                boss_hp = quest["progress"]["collect"]
+                quest_remark = f"*Le boss {boss_name} a encore {boss_hp} objets à collecter*\n"
         else:
             quest_remark = "Pas de quête active\n"    
     except Exception as e:
         quest_remark = e
-
-
 
     description = (
         f"**{username}** a accompli une tâche {task_type}\n"
