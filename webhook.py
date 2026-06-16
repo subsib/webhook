@@ -59,7 +59,7 @@ def habitica_webhook():
 
         if quest.get("active"):
             quest_key = quest["key"]
-            boss_name = content["quests"][quest_key]["boss"]["name"]
+            boss_name = content_quest["quests"][quest_key]["boss"]["name"]
             if "hp" in quest["progress"]:
                 boss_hp = quest["progress"]["hp"]   # PV restants du boss
                 quest_remark = f"*Le boss {boss_name} a encore {boss_hp:.1f} PV*\n"
