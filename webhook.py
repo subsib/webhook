@@ -9,6 +9,9 @@ HABITICA_USER_ID = os.environ.get("HABITICA_USER_ID")
 HABITICA_API_TOKEN = os.environ.get("HABITICA_API_TOKEN")
 HABITICA_USER_NAME = os.environ.get("HABITICA_USER_NAME")
 HABITICA_X_CLIENT = os.environ.get("HABITICA_X_CLIENT")
+HABITICA_USER_ID_BOSS = os.environ.get("HABITICA_USER_ID_BOSS")
+HABITICA_API_TOKEN_BOSS = os.environ.get("HABITICA_API_TOKEN_BOSS")
+HABITICA_X_CLIENT_BOSS = os.environ.get("HABITICA_X_CLIENT_BOSS")
 
 
 HABITICA_HEADERS = {
@@ -17,6 +20,14 @@ HABITICA_HEADERS = {
     "x-client": HABITICA_X_CLIENT,
     "Content-Type": "application/json"
 }
+
+HABITICA_HEADERS_BOSS = {
+    "x-api-user": HABITICA_USER_ID_BOSS,
+    "x-api-key": HABITICA_API_TOKEN_BOSS,
+    "x-client": HABITICA_X_CLIENT_BOSS,
+    "Content-Type": "application/json"
+}
+
 
 
 @app.route("/habitica-webhook", methods=["POST"])
@@ -55,7 +66,7 @@ def habitica_webhook():
         party = requests.get("https://habitica.com/api/v3/groups/party", headers=HABITICA_HEADERS).json()["data"]
         quest = party["quest"]
         party_name = party["name"]
-        content_quest = requests.get("https://habitica.com/api/v3/content", headers=HABITICA_HEADERS).json()["data"]
+        content_quest = requests.get("https://habitica.com/api/v3/content", headers=HABITICA_HEADERS_BOSS).json()["data"]
 
         if quest.get("active"):
             quest_key = quest["key"]
