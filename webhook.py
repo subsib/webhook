@@ -63,7 +63,7 @@ def habitica_webhook():
     party_name = "party null"
     quest_key = -1
     try:
-        party = requests.get("https://habitica.com/api/v3/groups/party", headers=HABITICA_HEADERS).json()["data"]
+        party = requests.get("https://habitica.com/api/v3/groups/party", headers=HABITICA_HEADERS_BOSS).json()["data"]
         quest = party["quest"]
         party_name = party["name"]
         content_quest = requests.get("https://habitica.com/api/v3/content", headers=HABITICA_HEADERS_BOSS).json()["data"]
